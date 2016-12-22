@@ -1,0 +1,125 @@
+<html ng-app="AngularNotes">
+  <head>
+    <title>Angular Notes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+  </head>
+
+  <body ng-controller="ApplicationController">
+    <nav>
+      <div class="nav-wrapper teal">
+        <a href="#" class="brand-logo"></a>
+      </div>
+    </nav>
+    <div class="container">
+      <h1>{{hello}}</h1>
+      <div class="row">
+        <div class="col s12 m4">
+          <div class="collection">
+            <a href="#!" class="collection-item"
+              ng-click="setCurrentCategory(null)">
+              <b>All</b>
+            </a>
+            <a href="#!" class="collection-item"
+              ng-repeat="category in categories"
+              ng-click="setCurrentCategory(category)"
+              ng-class="{'active':isCurrentCategory(category)}">
+              {{category.name}}
+            </a>
+          </div>
+        </div>
+
+        <div class="col s12 m8">
+          <div class="row">
+            <div class="col s12" ng-if="shouldShowCreating()">
+              <a class="waves-effect waves-light btn" ng-click="startCreating()">+ add note to {{currentCategory.name}}</a>
+            </div>
+            <div class="col s12" ng-if="isCreating">
+              <div class="card teal lighten-5">
+                <div class="card-content">
+                  <span class="card-title teal-text">New {{currentCategory.name}} note</span>
+                  <div class="row">
+                    <form class="col s12" ng-submit="createNote(newNote)">
+                      <div class="row">
+                        <div class="input-field col s12">
+                          <input id="title" type="text" ng-model="newNote.title">
+                          <label for="title">Title</label>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="input-field col s12">
+                          <textarea id="body" class="materialize-textarea" ng-model="newNote.body"></textarea>
+                          <label for="body">Note body</label>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="input-field col s6">
+                          <button class="btn waves-effect waves-light" type="submit" name="action">Create</button>
+                        </div>
+                        <div class="input-field col s6 right-align">
+                          <a class="waves-effect waves-light btn" ng-click="cancelCreating()">Cancel</a>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col s12" ng-if="shouldShowEditing()">
+              <div class="card lime lighten-5">
+                <div class="card-content">
+                  <span class="card-title teal-text">Editing {{editedNote.title}} note</span>
+                  <div class="row">
+                    <form class="col s12" ng-submit="updateNote(editedNote)">
+                      <div class="row">
+                        <div class="input-field col s12">
+                          <input id="title" type="text" ng-model="editedNote.title">
+                          <label for="title">Title</label>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="input-field col s12">
+                          <textarea id="body" class="materialize-textarea" ng-model="editedNote.body"></textarea>
+                          <label for="body">Note body</label>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="input-field col s6">
+                          <button class="btn waves-effect waves-light" type="submit" name="action">Save</button>
+                        </div>
+                        <div class="input-field col s6 right-align">
+                          <a class="waves-effect waves-light btn" ng-click="cancelEditing()">Cancel</a>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col s12"
+              ng-repeat="note in notes | filter:{category:currentCategory.name}">
+              <div class="card grey lighten-5">
+                <div>
+                  <div class="card-content">
+                    <span class="card-title teal-text">{{note.title}}</span>
+                    <p>{{note.body}}</p>
+                  </div>
+                  <div class="card-action">
+                    <a href="#" ng-click="setEditedNote(note);startEditing();">Edit</a>
+                    <a href="#" class="right" ng-click="deleteNote(note)">Delete</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0/angular.min.js"></script>
+    <script src="components/angularnotes.js"></script>
+  </body>
+</html>
